@@ -84,7 +84,7 @@ class MainScreen extends StatelessWidget {
             ),
 
             //expense list
-            const RecentExpenseList(),
+            RecentExpenseList(),
           ],
         ),
       );
