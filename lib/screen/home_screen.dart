@@ -15,6 +15,9 @@ import '../widgets/home_screen_widgets/custom_bottom_navigation_bar.dart';
 //models
 import '../model/expense.dart';
 
+//controller
+import '../controllers/expense_controller.dart';
+
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
@@ -27,6 +30,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ExpenseController _expenseController=Get.put(ExpenseController());
+
     final height = ScreenUtils.height(context);
     final width = ScreenUtils.width(context);
 
@@ -80,8 +85,8 @@ class HomeScreen extends StatelessWidget {
         //   });
         // },
         onPressed: () {
-          Expense.insert();
-          print(Expense.getExpenseList().length);
+          _expenseController.insert();
+          print(_expenseController.getExpenseList().length);
         },
         child: const Icon(Icons.add),
       ),
