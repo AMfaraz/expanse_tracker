@@ -21,4 +21,10 @@ class Expense {
   static List<Expense> getExpenseList(){
     return List.from(_expenseList);
   }
+
+  static void insert(){
+    _expenseList.add(
+      Expense(icon:Icon(Icons.fastfood),title: "Pizza", category: "Food", amount: 25, date: _format.format(DateTime.now()))
+      );
+  }
 }

@@ -12,6 +12,9 @@ import './expenses_screen.dart';
 //widgets
 import '../widgets/home_screen_widgets/custom_bottom_navigation_bar.dart';
 
+//models
+import '../model/expense.dart';
+
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
@@ -45,36 +48,40 @@ class HomeScreen extends StatelessWidget {
         ),
 
         //this adds modelbottomsheet
+        // onPressed: () {
+        //   showModalBottomSheet(context: context, builder: (context){
+        //     return Container(
+        //       margin: const EdgeInsets.symmetric(vertical: 15,horizontal: 10),
+        //       child: const Column(
+        //         children: <Widget>[
+        //           TextField(
+        //             decoration: InputDecoration(
+        //               label: Text("Name"),
+        //               hintText: "Pizza",
+        //             ),
+        //           ),
+              
+        //           TextField(
+        //             decoration: InputDecoration(
+        //               label: Text("Name"),
+        //               hintText: "Pizza",
+        //             ),
+        //           ),
+              
+        //           TextField(
+        //             decoration: InputDecoration(
+        //               label: Text("Name"),
+        //               hintText: "Pizza",
+        //             ),
+        //           ),
+        //         ],
+        //       ),
+        //     );
+        //   });
+        // },
         onPressed: () {
-          showModalBottomSheet(context: context, builder: (context){
-            return Container(
-              margin: const EdgeInsets.symmetric(vertical: 15,horizontal: 10),
-              child: const Column(
-                children: <Widget>[
-                  TextField(
-                    decoration: InputDecoration(
-                      label: Text("Name"),
-                      hintText: "Pizza",
-                    ),
-                  ),
-              
-                  TextField(
-                    decoration: InputDecoration(
-                      label: Text("Name"),
-                      hintText: "Pizza",
-                    ),
-                  ),
-              
-                  TextField(
-                    decoration: InputDecoration(
-                      label: Text("Name"),
-                      hintText: "Pizza",
-                    ),
-                  ),
-                ],
-              ),
-            );
-          });
+          Expense.insert();
+          print(Expense.getExpenseList().length);
         },
         child: const Icon(Icons.add),
       ),

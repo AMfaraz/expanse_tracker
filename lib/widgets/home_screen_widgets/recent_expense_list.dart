@@ -45,7 +45,7 @@ class RecentExpenseList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
                             Text("-\$ ${expenses[index].amount}"),
-                            Text("${expenses[index].date}"),
+                            Text(expenses[index].date),
                           ],
                         ),
                       ),
