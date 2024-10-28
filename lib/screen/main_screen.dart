@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 //utils
 import '../utils/colors.dart';
@@ -7,8 +8,13 @@ import '../utils/screen_utils.dart';
 //widgets
 import '../widgets/home_screen_widgets/recent_expense_list.dart';
 
+//controller
+import '../controllers/expense_controller.dart';
+
 class MainScreen extends StatelessWidget {
-  const MainScreen({super.key});
+  MainScreen({super.key});
+
+  final ExpenseController expenseController=Get.put(ExpenseController());
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +90,7 @@ class MainScreen extends StatelessWidget {
             ),
 
             //expense list
-            RecentExpenseList(),
+            RecentExpenseList(expenseController: expenseController,),
           ],
         ),
       );

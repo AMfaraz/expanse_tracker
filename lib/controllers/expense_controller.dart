@@ -10,18 +10,15 @@ var _format=DateFormat("dd-MM-yy");
 class ExpenseController extends GetxController{
   ExpenseController();
 
-  final RxList<Expense> _expenseList=[
-    Expense(icon:Icon(Icons.fastfood),title: "Pizza", category: "Food", amount: 25, date: _format.format(DateTime.now())),
-    Expense(icon:Icon(Icons.fastfood),title: "Pizza", category: "Food", amount: 25, date: _format.format(DateTime.now())),
-  ].obs;
+  final _expenseList=[].obs;
 
   List<Expense> getExpenseList(){
     return List.from(_expenseList);
   }
 
-  void insert(){
+  void insert({required String title,required String category,required double amount,required Icon icon}){
     _expenseList.add(
-      Expense(icon:Icon(Icons.fastfood),title: "Pizza", category: "Food", amount: 25, date: _format.format(DateTime.now()))
+      Expense(icon:icon,title: title, category: category, amount: amount, date: _format.format(DateTime.now()))
       );
   }
 

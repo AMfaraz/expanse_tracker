@@ -11,6 +11,7 @@ class CustomBNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //clip react for rounded corners
     return ClipRRect(
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(40.0),
