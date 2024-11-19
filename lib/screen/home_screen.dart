@@ -19,6 +19,9 @@ import '../controllers/field_controller.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
+  final ExpenseController _expenseController = Get.put(ExpenseController());
+  final FieldController _fieldController = Get.put(FieldController());
+
   final List<Widget> _pages = [MainScreen(), ExpensesScreen()];
   RxInt selectedPage = 0.obs;
 
@@ -28,8 +31,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ExpenseController _expenseController = Get.put(ExpenseController());
-    final FieldController _fieldController = Get.put(FieldController());
+    _expenseController.onInit();
 
     return Scaffold(
       backgroundColor: screenBackgroundColor,
@@ -53,7 +55,7 @@ class HomeScreen extends StatelessWidget {
           showModalBottomSheet(
               context: context,
               builder: (context) {
-                return CModelBottomSheet(fieldController: _fieldController, expenseController: _expenseController);
+                return CModelBottomSheet(fieldController: _fieldController, expenseController: _expenseController,);
               });
         },
         child: const Icon(Icons.add),

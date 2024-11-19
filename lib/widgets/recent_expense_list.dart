@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 //utils
-import '../../utils/colors.dart';
+import '../utils/colors.dart';
+import '../utils/functions.dart';
 
 //models
-import '../../model/expense.dart';
+import '../model/expense.dart';
 
 //controllers
-import '../../controllers/expense_controller.dart';
+import '../controllers/expense_controller.dart';
 
 class RecentExpenseList extends StatelessWidget {
   final ExpenseController expenseController;
@@ -17,10 +18,7 @@ class RecentExpenseList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-
-      //obx to listen to changes
-      child: Obx(() {
+        return Obx(() {
         final List<Expense> expenses = expenseController.getExpenseList();
         return ListView.builder(
           itemCount: expenses.length,
@@ -46,15 +44,14 @@ class RecentExpenseList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     Text("-\$ ${expenses[index].amount}"),
-                    Text(expenses[index].date),
+                    Text(dateToString(expenses[index].date)),
                   ],
                 ),
               ),
             );
           },
         );
-      }),
-    );
+      });
   }
 }
 

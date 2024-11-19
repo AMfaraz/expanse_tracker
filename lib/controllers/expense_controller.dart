@@ -1,14 +1,18 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 //models
 import '../model/expense.dart';
 
-var _format=DateFormat("dd-MM-yy");
+//utils
+import '../utils/functions.dart';
+
+//helper
+import '../helper/database_helper.dart';
 
 class ExpenseController extends GetxController{
   ExpenseController();
+
+  final dbHelper=DatabaseHelper.instance;
 
   final _expenseList=[].obs;
 
@@ -16,10 +20,44 @@ class ExpenseController extends GetxController{
     return List.from(_expenseList);
   }
 
-  void insert({required String title,required String category,required double amount,required Icon icon}){
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    addExpensesToList();
+    super.onInit();
+  }
+
+  void insert(Expense expense){
     _expenseList.add(
-      Expense(icon:icon,title: title, category: category, amount: amount, date: _format.format(DateTime.now()))
+      expense
       );
+  }
+
+  Expense fromJson(Map<String, dynamic> json) {
+    final id = json['id'];
+    final title = json['Title'];
+    final category = json['Category'];
+    final amount = json['Amount'].toDouble();
+    final date = stringToDate( json['Date']);
+    final icon = selectingIcon(category);
+    return Expense(icon: icon, title: title, category: category, amount: amount, date: date);
+  }
+
+  Map<String, dynamic> toJson(Expense expense) {
+    final Map<String, dynamic> data = {};
+    data['title'] = expense.title;
+    data['category'] = expense.category;
+    data['amount'] = expense.amount;
+    data['date'] = expense.date;
+    return data;
+  }
+
+  addExpensesToList() async {
+    final expenses=await dbHelper.read();
+    for(var expenseMap in expenses){
+      final expense=fromJson(expenseMap);
+      insert(expense);
+    }
   }
 
 }

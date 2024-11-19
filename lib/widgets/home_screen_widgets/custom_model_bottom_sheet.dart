@@ -10,11 +10,45 @@ import '../../utils/functions.dart';
 import '../../controllers/field_controller.dart';
 import '../../controllers/expense_controller.dart';
 
+//helpr
+import '../../helper/database_helper.dart';
+
 class CModelBottomSheet extends StatelessWidget {
   final FieldController fieldController;
   final ExpenseController expenseController;
 
-  const CModelBottomSheet({super.key,required this.fieldController,required this.expenseController});
+  CModelBottomSheet({
+    super.key,
+    required this.fieldController,
+    required this.expenseController,
+  });
+
+  final dbHelper = DatabaseHelper.instance;
+
+  onPress() async {
+    await dbHelper.insert({
+      "title": fieldController.titleEditingController.text,
+      "amount": double.parse(fieldController.amountEditingController.text),
+      "category": fieldController.selectedCategory.value,
+      "date": dateToString(DateTime.now()),
+    });
+    await expenseController.addExpensesToList();
+
+    Get.dialog(
+      AlertDialog(
+        title: const Text("Confirmation"),
+        content: const Text("Expense successfully added"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text("Ok"),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,15 +123,9 @@ class CModelBottomSheet extends StatelessWidget {
               foregroundColor: Colors.black,
               backgroundColor: cardBackgroundColor,
             ),
-            onPressed: () {
-              Icon icon=selectingIcon(fieldController.selectedCategory.value);
-              expenseController.insert(
-                title: fieldController.titleEditingController.text,
-                amount:
-                    double.parse(fieldController.amountEditingController.text),
-                category: fieldController.selectedCategory.value,
-                icon: icon,
-              );
+            onPressed: () async {
+              await onPress();
+              // Navigator.of(context).pop();
             },
             child: const Text("Add"),
           ),
