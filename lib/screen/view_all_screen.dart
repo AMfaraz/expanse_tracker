@@ -21,7 +21,7 @@ class ViewAllScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: screenBackgroundColor,
       appBar: AppBar(
-        title: const Text("Home"),
+        title: const Text("View all"),
       ),
       body: RecentExpenseList(expenseController: expenseController),
     );

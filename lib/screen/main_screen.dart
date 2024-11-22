@@ -17,7 +17,7 @@ import '../controllers/expense_controller.dart';
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
 
-  final ExpenseController expenseController = Get.put(ExpenseController());
+  final ExpenseController expenseController = Get.find<ExpenseController>();
 
   @override
   Widget build(BuildContext context) {

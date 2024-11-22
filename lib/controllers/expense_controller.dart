@@ -53,6 +53,7 @@ class ExpenseController extends GetxController{
   }
 
   addExpensesToList() async {
+    _expenseList.clear();
     final expenses=await dbHelper.read();
     for(var expenseMap in expenses){
       final expense=fromJson(expenseMap);

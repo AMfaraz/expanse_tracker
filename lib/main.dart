@@ -4,6 +4,17 @@ import 'package:get/get.dart';
 //screens
 import './screen/home_screen.dart';
 
+//controller
+import './controllers/expense_controller.dart';
+
+
+class AppBindings extends Bindings {
+  @override
+  void dependencies() {
+    Get.put<ExpenseController>(ExpenseController());
+  }
+}
+
 void main() {
   runApp(const MyApp());
 }

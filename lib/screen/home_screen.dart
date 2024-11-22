@@ -23,6 +23,7 @@ class HomeScreen extends StatelessWidget {
   final FieldController _fieldController = Get.put(FieldController());
 
   final List<Widget> _pages = [MainScreen(), ExpensesScreen()];
+  final List<String> _pageTitle=["Home","Expense"];
   RxInt selectedPage = 0.obs;
 
   void onIndexChange(int index) {
@@ -31,12 +32,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _expenseController.onInit();
+    
 
     return Scaffold(
       backgroundColor: screenBackgroundColor,
       appBar: AppBar(
-        title: const Text("Home"),
+        title: Obx(()=>Text(_pageTitle[selectedPage.value])),
       ),
 
       //main body
