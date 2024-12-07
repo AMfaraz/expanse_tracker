@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-//screens
-import './view_all_screen.dart';
+//screen
+// import '../screen/view_all_screen.dart';
 
 //utils
 import '../utils/colors.dart';
@@ -74,11 +74,11 @@ class MainScreen extends StatelessWidget {
           ),
 
           //heading
-          Row(
+          const Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              const Text(
+              Text(
                 "Expenses",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -86,11 +86,11 @@ class MainScreen extends StatelessWidget {
                 ),
               ),
               //this will be a button
-              TextButton(
-                  onPressed: () {
-                    Get.to(() => ViewAllScreen());
-                  },
-                  child: const Text("View all")),
+              // TextButton(
+              //     onPressed: () {
+              //       Get.to(() => ViewAllScreen());
+              //     },
+              //     child: const Text("View all"),),
             ],
           ),
 
@@ -98,6 +98,7 @@ class MainScreen extends StatelessWidget {
           Expanded(
             child: RecentExpenseList(
               expenseController: expenseController,
+              time: "month",
             ),
           ),
         ],

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pie_chart/pie_chart.dart';
+
 
 //utils
-import '../utils/screen_utils.dart';
 import '../utils/colors.dart';
 
 //controller
@@ -10,87 +11,79 @@ import '../controllers/expense_controller.dart';
 
 //widgets
 import '../widgets/recent_expense_list.dart';
+import '../widgets/expenses_screen_widgets/expense_pie_chart.dart';
 
 class ExpensesScreen extends StatelessWidget {
   ExpensesScreen({super.key});
 
-  final ExpenseController expenseController=Get.find<ExpenseController>();
+  final ExpenseController expenseController = Get.find<ExpenseController>();
 
   @override
   Widget build(BuildContext context) {
-    final double height = ScreenUtils.height(context);
-    final double widget = ScreenUtils.width(context);
+
+    Rx<Widget> expensesWidget = RecentExpenseList(
+      expenseController: expenseController,
+      time: "month",
+    ).obs;
+
+    Rx<Widget> expensePieChart=ExpensePieChart().obs;
 
     return Container(
       padding: const EdgeInsets.all(15),
       child: Column(
         children: <Widget>[
-          //balance box card
+          //pie chart
+          expensePieChart.value,
+
+          //heading
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            height: height * 0.3,
-            width: double.infinity,
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
               color: cardBackgroundColor,
-              borderRadius: BorderRadius.circular(25),
             ),
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text("Total Balance"),
-                Text("\$ 4000.00"),
+                //Last Week
+                ElevatedButton(
+                    onPressed: () {
+                      expensesWidget.value = RecentExpenseList(
+                        expenseController: expenseController,
+                        time: "week",
+                      );
+                    },
+                    child: const Text("Week")),
 
-                //income and expenses
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    //income
-                    Flexible(
-                      flex: 25,
-                      child: ListTile(
-                        leading: Icon(Icons.arrow_upward),
-                        title: Text("Income"),
-                        subtitle: Text("\$30000.0"),
-                      ),
-                    ),
+                //last Month
+                ElevatedButton(
+                    onPressed: () {
+                      expensesWidget.value = RecentExpenseList(
+                        expenseController: expenseController,
+                        time: "month",
+                      );
+                    },
+                    child: const Text("Month")),
 
-                    //expenses
-                    Flexible(
-                      flex: 25,
-                      child: ListTile(
-                        leading: Icon(Icons.arrow_downward),
-                        title: Text("Expenses"),
-                        subtitle: Text("\$30000.0"),
-                      ),
-                    ),
-                  ],
-                )
+                //Year
+                ElevatedButton(
+                    onPressed: () {
+                      expensesWidget.value = RecentExpenseList(
+                        expenseController: expenseController,
+                        time: "year",
+                      );
+                    },
+                    child: const Text("Year")),
               ],
             ),
           ),
 
-          //heading
-          const Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              const Text(
-                "Expenses",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              ),
-              //this will be a button
-            ],
-          ),
-
           //expense list
           Expanded(
-            child: RecentExpenseList(
-              expenseController: expenseController,
-            ),
+            child: Obx(() {
+              return expensesWidget.value;
+            }),
           ),
         ],
       ),

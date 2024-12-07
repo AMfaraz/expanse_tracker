@@ -18,12 +18,18 @@ class ViewAllScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    Rx<Widget> expensesWidget=RecentExpenseList(
+              expenseController: expenseController,
+              time: "month",
+            ).obs;
+
     return Scaffold(
       backgroundColor: screenBackgroundColor,
       appBar: AppBar(
         title: const Text("View all"),
       ),
-      body: RecentExpenseList(expenseController: expenseController),
+      body: expensesWidget.value,
     );
   }
 }
