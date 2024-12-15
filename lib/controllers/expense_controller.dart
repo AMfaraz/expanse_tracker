@@ -16,21 +16,47 @@ class ExpenseController extends GetxController {
 
   final _expenseList = [].obs;
 
-  List<Expense> getExpenseList() {
-    return List.from(_expenseList);
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    addExpensesToList();
+    super.onInit();
   }
 
-  @override
-  // void onInit() {
-  //   // TODO: implement onInit
-  //   addExpensesToList();
-  //   super.onInit();
+  // List<Expense> getExpenseList() {
+  //   return List.from(_expenseList);
   // }
 
 
-  // String test(){
-  //   return "test";
-  // }
+  List<Expense> getExpenseList({String time = "month"}) {
+    List<Expense> list=List.from(_expenseList);
+    late DateTime checkDate;
+
+    if (time == "year") {
+      checkDate = DateTime.now().subtract(const Duration(days: 365));
+      checkDate = DateTime(checkDate.year, checkDate.month, checkDate.day);
+
+    }
+    else if (time == "month") {
+      checkDate = DateTime.now().subtract(const Duration(days: 30));
+      checkDate = DateTime(checkDate.year, checkDate.month, checkDate.day);
+    }
+    else if (time == "week") {
+      checkDate = DateTime.now().subtract(const Duration(days: 7));
+      checkDate = DateTime(checkDate.year, checkDate.month, checkDate.day);
+    }
+
+    list.removeWhere((ele){
+        if(ele.date.isBefore(checkDate)){
+          return true;
+        }
+        return false;
+      });
+
+    return list;
+  }
+
+
 
   void insert(Expense expense) {
     _expenseList.add(expense);
@@ -60,7 +86,6 @@ class ExpenseController extends GetxController {
     return data;
   }
 
-
   addExpensesToList({String time = "month"}) async {
     _expenseList.clear();
     final List<Map<String, dynamic>> expenses = await dbHelper.read();
@@ -72,10 +97,8 @@ class ExpenseController extends GetxController {
       switch (time) {
         //checking if date is under a year
         case "year":
-          checkDate =
-              DateTime.now().subtract(const Duration(days: 365));
-          checkDate = DateTime(
-              checkDate.year, checkDate.month, checkDate.day);
+          checkDate = DateTime.now().subtract(const Duration(days: 365));
+          checkDate = DateTime(checkDate.year, checkDate.month, checkDate.day);
 
           if (expense.date.isAfter(checkDate)) {
             insert(expense);
@@ -84,10 +107,8 @@ class ExpenseController extends GetxController {
 
         //checking if date is under a month
         case "month":
-          checkDate =
-              DateTime.now().subtract(const Duration(days: 30));
-          checkDate = DateTime(
-              checkDate.year, checkDate.month, checkDate.day);
+          checkDate = DateTime.now().subtract(const Duration(days: 30));
+          checkDate = DateTime(checkDate.year, checkDate.month, checkDate.day);
 
           if (expense.date.isAfter(checkDate)) {
             insert(expense);
@@ -96,10 +117,8 @@ class ExpenseController extends GetxController {
 
         //checking if date is under a week
         case "week":
-          DateTime checkDate =
-              DateTime.now().subtract(const Duration(days: 7));
-          checkDate = DateTime(
-              checkDate.year, checkDate.month, checkDate.day);
+          DateTime checkDate = DateTime.now().subtract(const Duration(days: 7));
+          checkDate = DateTime(checkDate.year, checkDate.month, checkDate.day);
 
           if (expense.date.isAfter(checkDate)) {
             insert(expense);
@@ -111,13 +130,4 @@ class ExpenseController extends GetxController {
       }
     }
   }
-
 }
-
-
-
-
-
-
-
-

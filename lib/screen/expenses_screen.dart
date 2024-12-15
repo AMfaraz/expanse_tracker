@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pie_chart/pie_chart.dart';
-
 
 //utils
 import '../utils/colors.dart';
@@ -16,24 +14,36 @@ import '../widgets/expenses_screen_widgets/expense_pie_chart.dart';
 class ExpensesScreen extends StatelessWidget {
   ExpensesScreen({super.key});
 
-  final ExpenseController expenseController = Get.find<ExpenseController>();
+  // final ExpenseController expenseController = Get.find<ExpenseController>();
 
   @override
   Widget build(BuildContext context) {
-
     Rx<Widget> expensesWidget = RecentExpenseList(
-      expenseController: expenseController,
+      // expenseController: expenseController,
       time: "month",
     ).obs;
 
-    Rx<Widget> expensePieChart=ExpensePieChart().obs;
+    Rx<Widget> expensePieChart = ExpensePieChart().obs;
 
     return Container(
       padding: const EdgeInsets.all(15),
       child: Column(
         children: <Widget>[
           //pie chart
-          expensePieChart.value,
+          // expensePieChart.value,
+
+          Obx(() {
+            return expensePieChart.value;
+          }),
+
+          //PDF download button
+          Container(
+            margin: EdgeInsets.only(bottom: 10),
+            child: TextButton(
+              onPressed: () {},
+              child: Text("PDF Download"),
+            ),
+          ),
 
           //heading
           Container(
@@ -50,7 +60,9 @@ class ExpensesScreen extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () {
                       expensesWidget.value = RecentExpenseList(
-                        expenseController: expenseController,
+                        time: "week",
+                      );
+                      expensePieChart.value = ExpensePieChart(
                         time: "week",
                       );
                     },
@@ -60,7 +72,9 @@ class ExpensesScreen extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () {
                       expensesWidget.value = RecentExpenseList(
-                        expenseController: expenseController,
+                        time: "month",
+                      );
+                      expensePieChart.value = ExpensePieChart(
                         time: "month",
                       );
                     },
@@ -70,7 +84,9 @@ class ExpensesScreen extends StatelessWidget {
                 ElevatedButton(
                     onPressed: () {
                       expensesWidget.value = RecentExpenseList(
-                        expenseController: expenseController,
+                        time: "year",
+                      );
+                      expensePieChart.value = ExpensePieChart(
                         time: "year",
                       );
                     },

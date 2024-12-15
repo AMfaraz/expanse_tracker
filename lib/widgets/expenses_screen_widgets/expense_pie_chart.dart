@@ -12,22 +12,30 @@ import '../../controllers/expense_controller.dart';
 import '../../model/expense.dart';
 
 class ExpensePieChart extends StatelessWidget {
-  ExpensePieChart({super.key});
+  final String time;
+  ExpensePieChart({super.key,this.time="month"});
 
   final ExpenseController expenseController = Get.find<ExpenseController>();
 
-  final Map<String, double> pieMap = {
-    "Food": 10,
-    "Shopping": 20,
-    "Entertainment": 30,
-    "Misclaneous": 40,
+  final  pieMap = {
+    "Food": 10.0,
+    "Shopping": 20.0,
+    "Entertainment": 30.0,
+    "Misclaneous": 40.0,
   };
+
+  // final List<Color> pieColors = [
+  //   Colors.red,
+  //   Colors.yellow,
+  //   Colors.blue,
+  //   Colors.greenAccent,
+  // ];
 
   final List<Color> pieColors = [
     Colors.red,
     Colors.yellow,
     Colors.blue,
-    Colors.greenAccent,
+    Colors.lightGreen,
   ];
 
   setingPieMapValues() {
@@ -35,7 +43,7 @@ class ExpensePieChart extends StatelessWidget {
     double shopping = 0;
     double entertainment = 0;
     double misclaneous = 0;
-    final List<Expense> expenses = expenseController.getExpenseList();
+    final List<Expense> expenses = expenseController.getExpenseList(time: time);
 
     //summing the values
     for (var expense in expenses) {
@@ -51,26 +59,22 @@ class ExpensePieChart extends StatelessWidget {
 
     }
     // setting the map value
-      pieMap["Food"] = food;
-      pieMap["Shopping"] = shopping;
-      pieMap["Entertainment"] = entertainment;
-      pieMap["Misclaneous"] = misclaneous;
-  //   return {
-  //   "Food": food,
-  //   "Shopping": shopping,
-  //   "Entertainment": entertainment,
-  //   "Misclaneous": misclaneous,
-  // };
-    // print(expenses);
+    pieMap.assignAll({
+    "Food": food,
+    "Shopping": shopping,
+    "Entertainment": entertainment,
+    "Misclaneous": misclaneous,
+  });
   }
 
   @override
   Widget build(BuildContext context) {
     final double height = ScreenUtils.height(context);
-    // print("helelo this is");
+
+    // return Obx((){
     setingPieMapValues();
 
-    return Container(
+      return Container(
             margin: const EdgeInsets.symmetric(vertical: 20),
             height: height * 0.3,
             width: double.infinity,
@@ -78,13 +82,19 @@ class ExpensePieChart extends StatelessWidget {
             child: PieChart(
               dataMap: pieMap,
               colorList: pieColors,
+              // gradientList: pieGradient,
+
+              centerText: "Expenses",
+              ringStrokeWidth: 24, 
+              // Set the animation duration of the pie chart 
+              animationDuration: const Duration(seconds: 1), 
 
               //chart optins
               chartValuesOptions: const ChartValuesOptions(
                 showChartValues: true,
                 showChartValuesOutside: true,
                 showChartValuesInPercentage: true,
-                showChartValueBackground: false,
+                showChartValueBackground: true,
               ),
 
               //legend options
@@ -98,5 +108,8 @@ class ExpensePieChart extends StatelessWidget {
 
             ),
           );
+    // });
   }
+
+
 }
