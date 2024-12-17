@@ -1,29 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pdf/pdf.dart';
+import 'dart:ui' as ui;
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+import 'package:path_provider/path_provider.dart';
 
 //utils
 import '../utils/colors.dart';
-
-//controller
-import '../controllers/expense_controller.dart';
 
 //widgets
 import '../widgets/recent_expense_list.dart';
 import '../widgets/expenses_screen_widgets/expense_pie_chart.dart';
 
 class ExpensesScreen extends StatelessWidget {
+
+  final GlobalKey pieChartKey=GlobalKey();
+
   ExpensesScreen({super.key});
 
-  // final ExpenseController expenseController = Get.find<ExpenseController>();
+  Future<void> downloadPieChartAsPdf(pieChart) async {
+      // Capture the pie chart as an image
+      ui.Image chartImage = await pieChart.capturePieChart();
+      ByteData? byteData = await chartImage.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List imageBytes = byteData!.buffer.asUint8List();
+
+      // Create a PDF
+      final pdf = pw.Document();
+      pdf.addPage(
+        pw.Page(
+          build: (pw.Context context) {
+            return pw.Center(
+              child: pw.Image(
+                pw.MemoryImage(imageBytes),
+                fit: pw.BoxFit.contain,
+              ),
+            );
+          },
+        ),
+      );
+
+      // // Save the PDF or trigger download
+      // await Printing.sharePdf(
+      //   bytes: await pdf.save(),
+      //   filename: 'expense_pie_chart.pdf',
+      // );
+
+
+      // Save the PDF locally
+  final directory = await getApplicationDocumentsDirectory();
+  // final directory = await getTemporaryDirectory();
+  final file = File('${directory.path}/expense_pie_chart.pdf');
+  await file.writeAsBytes(await pdf.save());
+
+  // Share or open the file
+  await Printing.sharePdf(
+    bytes: await pdf.save(),
+    filename: 'expense_pie_chart.pdf',
+  );
+    }
 
   @override
   Widget build(BuildContext context) {
     Rx<Widget> expensesWidget = RecentExpenseList(
-      // expenseController: expenseController,
       time: "month",
     ).obs;
 
-    Rx<Widget> expensePieChart = ExpensePieChart().obs;
+    Rx<Widget> expensePieChart = ExpensePieChart(pieChartKey: pieChartKey,).obs;
 
     return Container(
       padding: const EdgeInsets.all(15),
@@ -38,10 +83,12 @@ class ExpensesScreen extends StatelessWidget {
 
           //PDF download button
           Container(
-            margin: EdgeInsets.only(bottom: 10),
+            margin: const EdgeInsets.only(bottom: 10),
             child: TextButton(
-              onPressed: () {},
-              child: Text("PDF Download"),
+              onPressed: (){
+                downloadPieChartAsPdf(expensePieChart.value);
+              },
+              child: const Text("PDF Download"),
             ),
           ),
 
@@ -64,6 +111,7 @@ class ExpensesScreen extends StatelessWidget {
                       );
                       expensePieChart.value = ExpensePieChart(
                         time: "week",
+                        pieChartKey: pieChartKey,
                       );
                     },
                     child: const Text("Week")),
@@ -76,6 +124,7 @@ class ExpensesScreen extends StatelessWidget {
                       );
                       expensePieChart.value = ExpensePieChart(
                         time: "month",
+                        pieChartKey: pieChartKey,
                       );
                     },
                     child: const Text("Month")),
@@ -87,6 +136,7 @@ class ExpensesScreen extends StatelessWidget {
                         time: "year",
                       );
                       expensePieChart.value = ExpensePieChart(
+                        pieChartKey: pieChartKey,
                         time: "year",
                       );
                     },

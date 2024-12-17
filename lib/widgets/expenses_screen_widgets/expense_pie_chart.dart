@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pie_chart/pie_chart.dart';
 import 'package:get/get.dart';
+import 'package:flutter/rendering.dart';
+import 'dart:ui' as ui;
 
 //utils
 import '../../utils/screen_utils.dart';
@@ -13,7 +15,9 @@ import '../../model/expense.dart';
 
 class ExpensePieChart extends StatelessWidget {
   final String time;
-  ExpensePieChart({super.key,this.time="month"});
+  final GlobalKey pieChartKey;
+
+  ExpensePieChart({super.key,this.time="month", required this.pieChartKey});
 
   final ExpenseController expenseController = Get.find<ExpenseController>();
 
@@ -67,6 +71,77 @@ class ExpensePieChart extends StatelessWidget {
   });
   }
 
+  Future<ui.Image> capturePieChart() async {
+    RenderRepaintBoundary boundary =
+        pieChartKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+    return await boundary.toImage(pixelRatio: 3.0);
+  }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   final double height = ScreenUtils.height(context);
+
+  //   // return Obx((){
+  //   setingPieMapValues();
+
+  //     return Container(
+  //           margin: const EdgeInsets.symmetric(vertical: 20),
+  //           height: height * 0.3,
+  //           width: double.infinity,
+  //           alignment: Alignment.center,
+  //           child: PieChart(
+  //             dataMap: pieMap,
+  //             colorList: pieColors,
+  //             // gradientList: pieGradient,
+
+  //             centerText: "Expenses",
+  //             ringStrokeWidth: 24, 
+  //             // Set the animation duration of the pie chart 
+  //             animationDuration: const Duration(seconds: 1), 
+
+  //             //chart optins
+  //             chartValuesOptions: const ChartValuesOptions(
+  //               showChartValues: true,
+  //               showChartValuesOutside: true,
+  //               showChartValuesInPercentage: true,
+  //               showChartValueBackground: true,
+  //             ),
+
+  //             //legend options
+  //             legendOptions: const LegendOptions(
+  //               showLegends: true,
+  //               legendShape: BoxShape.rectangle,
+  //               legendTextStyle: TextStyle(fontSize: 10),
+  //               legendPosition: LegendPosition.right,
+  //               showLegendsInRow: false,
+  //             ),
+
+  //           ),
+  //         );
+  //   // });
+  // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     final double height = ScreenUtils.height(context);
@@ -74,40 +149,43 @@ class ExpensePieChart extends StatelessWidget {
     // return Obx((){
     setingPieMapValues();
 
-      return Container(
-            margin: const EdgeInsets.symmetric(vertical: 20),
-            height: height * 0.3,
-            width: double.infinity,
-            alignment: Alignment.center,
-            child: PieChart(
-              dataMap: pieMap,
-              colorList: pieColors,
-              // gradientList: pieGradient,
-
-              centerText: "Expenses",
-              ringStrokeWidth: 24, 
-              // Set the animation duration of the pie chart 
-              animationDuration: const Duration(seconds: 1), 
-
-              //chart optins
-              chartValuesOptions: const ChartValuesOptions(
-                showChartValues: true,
-                showChartValuesOutside: true,
-                showChartValuesInPercentage: true,
-                showChartValueBackground: true,
+      return RepaintBoundary(
+        key: pieChartKey,
+        child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 20),
+              height: height * 0.3,
+              width: double.infinity,
+              alignment: Alignment.center,
+              child: PieChart(
+                dataMap: pieMap,
+                colorList: pieColors,
+                // gradientList: pieGradient,
+        
+                centerText: "Expenses",
+                ringStrokeWidth: 24, 
+                // Set the animation duration of the pie chart 
+                animationDuration: const Duration(seconds: 1), 
+        
+                //chart optins
+                chartValuesOptions: const ChartValuesOptions(
+                  showChartValues: true,
+                  showChartValuesOutside: true,
+                  showChartValuesInPercentage: true,
+                  showChartValueBackground: true,
+                ),
+        
+                //legend options
+                legendOptions: const LegendOptions(
+                  showLegends: true,
+                  legendShape: BoxShape.rectangle,
+                  legendTextStyle: TextStyle(fontSize: 10),
+                  legendPosition: LegendPosition.right,
+                  showLegendsInRow: false,
+                ),
+        
               ),
-
-              //legend options
-              legendOptions: const LegendOptions(
-                showLegends: true,
-                legendShape: BoxShape.rectangle,
-                legendTextStyle: TextStyle(fontSize: 10),
-                legendPosition: LegendPosition.right,
-                showLegendsInRow: false,
-              ),
-
             ),
-          );
+      );
     // });
   }
 
