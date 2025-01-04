@@ -1,3 +1,4 @@
+import 'package:expense_tracker/controllers/field_controller.dart';
 import 'package:get/get.dart';
 
 //models
@@ -11,6 +12,7 @@ import '../helper/database_helper.dart';
 
 class ExpenseController extends GetxController {
   ExpenseController();
+  final fieldController=Get.put(FieldController());
 
   final dbHelper = DatabaseHelper.instance;
 
@@ -22,11 +24,6 @@ class ExpenseController extends GetxController {
     addExpensesToList();
     super.onInit();
   }
-
-  // List<Expense> getExpenseList() {
-  //   return List.from(_expenseList);
-  // }
-
 
   List<Expense> getExpenseList({String time = "month"}) {
     List<Expense> list=List.from(_expenseList);
@@ -59,6 +56,7 @@ class ExpenseController extends GetxController {
 
 
   void insert(Expense expense) {
+    fieldController.totalExpense=fieldController.totalExpense+expense.amount;
     _expenseList.add(expense);
   }
 
@@ -88,6 +86,7 @@ class ExpenseController extends GetxController {
 
   addExpensesToList({String time = "month"}) async {
     _expenseList.clear();
+    fieldController.totalExpense.value=0.0;
     final List<Map<String, dynamic>> expenses = await dbHelper.read();
     DateTime? checkDate = null;
 

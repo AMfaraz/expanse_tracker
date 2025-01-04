@@ -6,12 +6,15 @@ import './screen/home_screen.dart';
 
 //controller
 import './controllers/expense_controller.dart';
+import 'package:expense_tracker/controllers/field_controller.dart';
 
 
 class AppBindings extends Bindings {
   @override
   void dependencies() {
     Get.put<ExpenseController>(ExpenseController());
+    // Get.put<FieldController>(FieldController());
+    // Get.lazyPut(()=>FieldController());
   }
 }
 

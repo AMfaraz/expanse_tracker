@@ -42,16 +42,8 @@ class ExpensesScreen extends StatelessWidget {
         ),
       );
 
-      // // Save the PDF or trigger download
-      // await Printing.sharePdf(
-      //   bytes: await pdf.save(),
-      //   filename: 'expense_pie_chart.pdf',
-      // );
-
-
       // Save the PDF locally
   final directory = await getApplicationDocumentsDirectory();
-  // final directory = await getTemporaryDirectory();
   final file = File('${directory.path}/expense_pie_chart.pdf');
   await file.writeAsBytes(await pdf.save());
 

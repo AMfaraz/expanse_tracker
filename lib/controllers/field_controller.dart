@@ -11,6 +11,9 @@ class FieldController extends GetxController{
     "Entertainment",
     "Misclaneous",
   ];
+  Rx<double> totalExpense=0.0.obs;
+  Rx<double> totalIncome=100.0.obs;
+  Rx<bool> expenseGincome=false.obs;
 
   @override
   void onInit() {
