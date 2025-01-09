@@ -16,6 +16,10 @@ class FieldController extends GetxController{
   Rx<bool> expenseGincome=false.obs;
 
   @override
+  void setIncome(double income){
+    totalIncome.value=income;
+  }
+
   void onInit() {
     // TODO: implement onInit
     super.onInit();

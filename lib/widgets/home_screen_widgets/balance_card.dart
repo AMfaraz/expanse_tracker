@@ -72,9 +72,10 @@ class BalanceCard extends StatelessWidget {
                 // Income Section
                 Row(
                   children: [
-                    const Icon(
-                      Icons.arrow_downward,
+                    IconButton(
+                      icon:const Icon(Icons.arrow_downward),
                       color: Colors.green,
+                      onPressed: (){fieldController.setIncome(500);},
                     ),
 
                     // Spacing between icon and text
@@ -102,7 +103,7 @@ class BalanceCard extends StatelessWidget {
                     ),
                   ],
                 ),
-
+                
                 // Expenses Section
                 Row(
                   children: <Widget>[
@@ -113,14 +114,13 @@ class BalanceCard extends StatelessWidget {
 
                     const SizedBox(width: 8), // Spacing between icon and text
 
+                    //expenseGincome is used to change the color of the field to red if it exceed the income
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           "Expenses",
                           style: TextStyle(
-                            // color: Colors.white,
-                            // color: (fieldController.totalExpense.value > 200)
                             color: (expenseGincome)
                                 ? Colors.red
                                 : Colors.white,
@@ -141,12 +141,6 @@ class BalanceCard extends StatelessWidget {
                       ],
                     ),
 
-                    //error msg
-                    // const Icon(
-                    //   Icons.warning,
-                    //   color: Colors.red,
-                    // ),
-
                     (expenseGincome)?const Tooltip(
                       message: "Your expenses are more than your Income",
                       child: Icon(
@@ -155,12 +149,6 @@ class BalanceCard extends StatelessWidget {
                       ),
                     ):const SizedBox(),
 
-                    // (expenseGincome)?IconButton(
-                    //   tooltip: "YOu jksjaks",
-                    //     icon: Icon(Icons.warning,color: Colors.red,),
-                    //     onPressed: (){},
-                      
-                    // ):const SizedBox(),
                   ],
                 ),
               ],
