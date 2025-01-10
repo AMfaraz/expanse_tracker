@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 class FieldController extends GetxController{
   final TextEditingController titleEditingController=TextEditingController();
   final TextEditingController amountEditingController=TextEditingController();
+  final TextEditingController incomeEditingController=TextEditingController();
   var selectedCategory="Food".obs;
   final List<String> categoryValues = [
     "Food",
@@ -35,6 +36,8 @@ class FieldController extends GetxController{
   void onClose() {
     // TODO: implement onClose
     titleEditingController.dispose();
+    amountEditingController.dispose();
+    incomeEditingController.dispose();
     super.onClose();
   }
 }
